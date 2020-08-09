@@ -12,10 +12,11 @@ const TextContainer = styled.div`
   width: 100%;
 `;
 
-function RandomCatFact() {
+function RandomCatFact(props) {
   const [catFactText, setCatFactText] = React.useState(null);
 
-  React.useEffect(() => {
+  const fetchData = () =>  {
+    props.setTimeLeft(props.refreshTime);
     fetch(CAT_FACT_API)
       .then((response) => {
         return response.json();
@@ -24,6 +25,10 @@ function RandomCatFact() {
         console.log(data);
         setCatFactText(data.text);
       });
+  }
+
+  React.useEffect(() => {
+    fetchData();
   }, []);
 
 
@@ -32,6 +37,7 @@ function RandomCatFact() {
 
   return (
     <MainContainer>
+      {props.Timer('cat fact', props.timeLeft, fetchData)}
       <TextContainer> {catFactText} </TextContainer>
     </MainContainer>
   );
